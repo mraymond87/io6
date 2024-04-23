@@ -1,0 +1,49 @@
+# lyrics from a file
+def read_lyrics(filename):
+    with open(filename, 'r') as file:
+        lyrics = file.read().lower().split()  # Read file, convert to lowercase and split into words
+    return lyrics
+
+# F word count dictionary for lyrics
+def create_word_count(lyrics):
+    word_count = {}  # Initialize an empty dictionary
+    for word in lyrics:
+        word_count[word] = word_count.get(word, 0) + 1  # Count occurrences of each word
+    return word_count
+
+# Function to predict the artist 
+def predict_artist(lyric, artist1_count, artist2_count):
+    lyric_words = lyric.lower().split()  # Convert lyric to lowercase and split into words
+    artist1_sum = sum(artist1_count.get(word, 0) for word in lyric_words)  # Calculate sum for artist 1
+    artist2_sum = sum(artist2_count.get(word, 0) for word in lyric_words)  # Calculate sum for artist 2
+    if artist1_sum > artist2_sum:
+        return "Taylor Swift"
+    elif artist2_sum > artist1_sum:
+        return "Beyoncé"
+    else:
+        return "Both artists"
+
+# Main function
+def main():
+    # Get input from the user
+    print("Welcome to the Artist Lyric Predictor!")
+    print("======================================")
+    artist1 = input("Enter the name of the first artist: ")
+    artist1_file = input(f"Enter the filename for {artist1}: ")
+    artist2 = input("Enter the name of the second artist: ")
+    artist2_file = input(f"Enter the filename for {artist2}: ")
+    lyric = input("Input a lyric (without punctuation) to predict: ")
+
+    # Read lyrics and create word count 
+    artist1_lyrics = read_lyrics(artist1_file)
+    artist1_word_count = create_word_count(artist1_lyrics)
+    artist2_lyrics = read_lyrics(artist2_file)
+    artist2_word_count = create_word_count(artist2_lyrics)
+
+    # Predict the artist for the given lyric
+    prediction = predict_artist(lyric, artist1_word_count, artist2_word_count)
+    print(f"{prediction} probably wrote that song!")
+
+# Execute main function
+if __name__ == "__main__":
+    main()
